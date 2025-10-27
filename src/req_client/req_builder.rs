@@ -1,14 +1,12 @@
 use reqwest::Client;
 use reqwest::RequestBuilder;
 
-
 pub struct HttpRequest {
     method: String,
     url: String,
     headers: Vec<(String, String)>,
     body: Option<String>,
 }
-
 
 impl HttpRequest {
     pub fn new() -> Self {
@@ -43,14 +41,16 @@ impl HttpRequest {
     }
     pub fn set_method(&mut self, method: String) -> &mut Self {
         if !["GET", "POST", "PUT", "DELETE", "PATCH"].contains(&method.as_str()) {
-            panic!("Invalid HTTP method: {}, method should be: GET, POST, PUT, DELETE.", method);
+            panic!(
+                "Invalid HTTP method: {}, method should be: GET, POST, PUT, DELETE.",
+                method
+            );
         }
         self.method = method;
-        return self
+        return self;
     }
 
     pub fn request_builder(&self) -> reqwest::RequestBuilder {
-
         if self.method.is_empty() {
             panic!("HTTP method cannot be empty");
         }
@@ -71,15 +71,12 @@ impl HttpRequest {
         }
         if let Some(body) = &self.body {
             request_builder = request_builder.body(body.clone());
-        } 
+        }
         return request_builder;
-
     }
-
 }
 
 pub async fn send(request: RequestBuilder) -> Result<reqwest::Response, String> {
     let response = request.send().await.map_err(|e| e.to_string())?;
     Ok(response)
 }
-
