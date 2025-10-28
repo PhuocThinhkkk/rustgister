@@ -3,6 +3,8 @@
 mod req_client;
 use req_client::req_handler;
 use dotenvy::dotenv;
+mod app;
+use app::App;
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -21,6 +23,8 @@ async fn main() -> Result<(), reqwest::Error> {
         return Ok(());
     }
     dotenv().ok();
+    let mut app = App::new(&args.session);
+    app.set_client_metadata().await;
     let res = req_handler::getAllStudyProgramRegist(&args.session).await;
     let res2 = req_handler::getRegistSemesterCreditQuota(&args.session).await;
     let res3 = req_handler::getAllClassRegisted(&args.session).await;
