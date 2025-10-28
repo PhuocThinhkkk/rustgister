@@ -25,17 +25,13 @@ async fn main() -> Result<(), reqwest::Error> {
     dotenv().ok();
     let mut app = App::new(&args.session);
     app.set_client_metadata().await;
-    let res = req_handler::getAllStudyProgramRegist(&args.session).await;
-    let res2 = req_handler::getRegistSemesterCreditQuota(&args.session).await;
-    let res3 = req_handler::getAllClassRegisted(&args.session).await;
-    let res4 = req_handler::getAllClassAllowRegist(&args.session).await;
+    app.set_all_class_allow_regist().await;
+    app.set_all_class_registed().await;
+
+    println!("{:#?}", app);
 
     println!("[DOG]");
 
-    println!("{}", res);
-    println!("{}", res2);
-    println!("{}", res3);
-    println!("{}", res4);
     Ok(())
 }
 
